@@ -13,15 +13,12 @@ import assignment1.sphere
 WIDTH = 500
 HEIGHT = 500
 
-# Viewport and camera
 viewport_size = 1.0
 projection_plane_z = 1.0
 camera_position = assignment1.vec.Vec(0, 0, 0)
 
-# Background color (white)
 background_color = assignment1.color.Color(255, 255, 255)
 
-# Spheres (just like in the JS code)
 spheres = [
     assignment1.sphere.Sphere(assignment1.vec.Vec(0, -1, 3), 1, assignment1.color.Color(255, 0, 0), 500),   # red sphere
     assignment1.sphere.Sphere(assignment1.vec.Vec(-2, 0, 4), 1, assignment1.color.Color(0, 255, 0), 10),    # green sphere
@@ -29,16 +26,11 @@ spheres = [
     assignment1.sphere.Sphere(assignment1.vec.Vec(0, -5001, 0), 5000, assignment1.color.Color(255, 255, 0), 1000)  # yellow floor
 ]
 
-# Lights
 lights = [
     AmbientLight(intensity=0.2),
     PointLight(intensity=0.6, position=assignment1.vec.Vec(2, 1, 0)),
     DirectionalLight(intensity=0.2, direction=assignment1.vec.Vec(1, 4, 4))
 ]
-
-# --------------------------------------------------------------
-# Helper functions
-# --------------------------------------------------------------
 
 def canvas_to_viewport(x, y):
     """
@@ -64,7 +56,7 @@ def intersect_ray_sphere(origin, direction, sphere):
 
     discriminant = k2*k2 - 4*k1*k3
     if discriminant < 0:
-        return float('inf'), float('inf')  # No intersection
+        return float('inf'), float('inf')  
 
     from math import sqrt
     sqrt_d = sqrt(discriminant)
@@ -86,7 +78,6 @@ def compute_lighting(point, normal, view, specular):
             # Ambient light
             intensity += light.intensity
         else:
-            # Point or Directional
             if isinstance(light, PointLight):
                 # L = light.position - point
                 L = light.position.sub(point)
@@ -160,7 +151,6 @@ def render_scene():
             fx = px + WIDTH//2
             fy = HEIGHT//2 - py - 1
 
-            # Clamp color components to [0,255]
             r = max(min(int(color.r), 255), 0)
             g = max(min(int(color.g), 255), 0)
             b = max(min(int(color.b), 255), 0)
