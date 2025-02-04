@@ -1,6 +1,6 @@
 # Ray Tracing
 
-This project is a **minimal** ray tracer written in C++. It renders three colored spheres (red, green, and blue) against a white background, outputting the image data in [PPM](http://netpbm.sourceforge.net/doc/ppm.html) format to standard output.
+This project is a **minimal** ray tracer written in Python. It renders three colored spheres (red, green, and blue) against a white background, outputting the image data in [PPM](http://netpbm.sourceforge.net/doc/ppm.html) format to standard output.
 
 
 ## Features
