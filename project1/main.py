@@ -35,9 +35,9 @@ camera_rotation = [
 ]
 
 lights = [
-    assignment2.light.AmbientLight(intensity=0.3),         # was 0.2
-    assignment2.light.PointLight(intensity=0.8, position=assignment1.vec.Vec(2, 1, 0)),  # was 0.6
-    assignment2.light.DirectionalLight(intensity=0.4, direction=assignment1.vec.Vec(1, 4, 4))  # was 0.2
+    assignment2.light.AmbientLight(intensity=0.4),         
+    assignment2.light.PointLight(intensity=0.8, position=assignment1.vec.Vec(2, 1, 0)),  
+    assignment2.light.DirectionalLight(intensity=0.6, direction=assignment1.vec.Vec(1, 4, 4))  
 ]
 
 background_color = assignment1.color.Color(135, 206, 235)
@@ -54,7 +54,6 @@ spheres.append(
                                 ground_color, specular=-1, reflective=0)
 )
 
-# --- Random small spheres ---
 for a in range(-11, 11):
     for b in range(-11, 11):
         choose_mat = random.random()
@@ -92,7 +91,6 @@ for a in range(-11, 11):
                                               specular=500, reflective=0.9)
                 )
 
-# --- Three main spheres ---
 spheres.append(
     assignment1.sphere.Sphere(assignment1.vec.Vec(0, 1, 0), 1.0,
                               assignment1.color.Color(255, 255, 255),
@@ -215,9 +213,7 @@ def reflect_ray(incident, normal):
     """
     return normal.mul(2 * incident.dot(normal)).sub(incident)
 
-# A very small number to avoid self-intersections.
 EPSILON = 0.001
-# Maximum recursion depth for reflections.
 RECURSION_DEPTH = 3
 
 def trace_ray(origin, direction, t_min, t_max, depth):
@@ -271,11 +267,10 @@ def render_scene():
             g = max(min(int(color.g), 255), 0)
             b = max(min(int(color.b), 255), 0)
             pixels[i, j] = (r, g, b)
-        # Print progress after finishing each scanline.
         print(f"Scanline {j+1}/{HEIGHT} complete", flush=True)
     return img
 
 if __name__ == "__main__":
     image = render_scene()
-    image.save("project_output.png")
+    image.save("project_output3.png")
     print("Rendering complete. Saved as project_output.png")

@@ -9,3 +9,6 @@ class Color:
     
     def add(self, other):
         return Color(self.r + other.r, self.g + other.g, self.b + other.b)
+
+    def div(self, other):
+        return Color(self.r/other, self.g/other, self.b/other)
