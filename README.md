@@ -1,63 +1,100 @@
-# Ray Tracing
+# ICS415 - Computer Graphics Assignments and Projects
 
-This project is a **minimal** ray tracer written in Python. It renders three colored spheres (red, green, and blue) against a white background, outputting the image data in [PPM](http://netpbm.sourceforge.net/doc/ppm.html) format to standard output.
+This repository contains the assignments and projects for the **ICS415 (Computer Graphics)** course. Each directory is structured as follows:
 
+- `assignment[number]` - Contains the work for that specific assignment.
+- `project[number]` - Contains the work for that specific project.
+- `inclass_assessment` - Contains inclass work.
 
-## Features
-
-- Defines spheres in 3D space and computes their intersection with a viewing ray.
-- Renders each pixel by casting a ray and returning the color of the nearest sphere (or white if no sphere is hit).
-- Outputs the final image as PPM data, which can be redirected to an image file (e.g., `image.ppm`).
+Each assignment and project directory includes a `README.md` file explaining the required tasks and describing the final output of the code.
 
 ---
 
-## Requirements
+## Installation Instructions
 
-- A **C++ compiler** that supports **C++11** or higher:
-  - On macOS, `clang++` is available by default via Xcode Command Line Tools.
-  - On Linux, you can typically install or use `g++` or `clang++`.
-  - On Windows, you can use [Visual Studio](https://visualstudio.microsoft.com/downloads/), [MSYS2/MinGW](https://www.msys2.org/), or [Cygwin](https://www.cygwin.com/).
+This repository contains Python-based graphics assignments and projects. Ensure you have Python installed on your system before running the scripts.
 
-- **No external libraries** are needed; everything is done via the C++ standard library.
+### Windows Installation
+1. Download and install [Python](https://www.python.org/downloads/) (ensure `python` is added to the system PATH during installation).
+2. Open Command Prompt and verify the installation:
+   ```bash
+   python --version
+   ```
+3. Clone this repository:
+   ```bash
+   git clone https://github.com/haidar1337/ics415-computer-graphics.git
+   ```
+4. Navigate to the cloned repository:
+   ```bash
+   cd path/to/cloned_repository
+   ```
+5. Install any required dependencies (if specified in `requirements.txt`):
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## Usage
-Start by cloning this repository using
+### Linux Installation
+1. Install Python (if not already installed):
+   ```bash
+   sudo apt update && sudo apt install python3 python3-pip -y
+   ```
+2. Verify the installation:
+   ```bash
+   python3 --version
+   ```
+3. Clone this repository:
+   ```bash
+   git clone https://github.com/haidar1337/ics415-computer-graphics.git
+   ```
+4. Navigate to the cloned repository:
+   ```bash
+   cd path/to/cloned_repository
+   ```
+5. Install dependencies:
+   ```bash
+   pip3 install -r requirements.txt
+   ```
+
+### macOS Installation
+1. Install Python via Homebrew (if not already installed):
+   ```bash
+   brew install python
+   ```
+2. Verify the installation:
+   ```bash
+   python3 --version
+   ```
+3. Clone this repository:
+   ```bash
+   git clone https://github.com/haidar1337/ics415-computer-graphics.git
+   ```
+4. Navigate to the cloned repository:
+   ```bash
+   cd path/to/cloned_repository
+   ```
+5. Install dependencies:
+   ```bash
+   pip3 install -r requirements.txt
+   ```
+
+---
+
+## Running an Assignment or Project
+Each assignment or project is written in Python and should have its own `README.md` file explaining how to run it. Typically, you can execute the scripts using:
 
 ```bash
-git clone https://github.com/haidar1337/basic-ray-tracer.git
+python3 assignment[number]/main.py
+```
+or
+```bash
+python3 project[number]/main.py
 ```
 
-cd into the project directory using
+Some projects may require additional setup, which will be specified in their respective `README.md` files.
 
-```bash
-cd path/to/cloned_repository
-```
-
-Compile the program to a binary executable using your compiler
-- Using g++, you can use the following
-```bash
-g++ main.cc -o raytrace
-```
-- Using clang, you can use the following
-```bash
-clang++ main.cc -o raytrace
-```
-- Using gcc, you can use the following
-```bash
-gcc main.cc -o raytrace
-```
-Once you compile the program, execute it and redirect the execution to an image.ppm file like so
-```bash
-./raytrace > image.ppm
-```
+---
 
 ## Viewing the Output
-Your program will print a PPM (ASCII “P3” variant) to stdout.
+Many assignments and projects generate graphical outputs that can be viewed using your favorite image viewer
 
-- On macOS: ```open image.ppm```
-- On Linux: ```xdg-open image.ppm``` or ```eog image.ppm```
-- On Windows:
-Some apps/viewers may read ```.ppm``` files directly (e.g., IrfanView, XnView, GIMP).
-Alternatively, convert it to PNG or JPG with an image conversion tool.
-Once opened, you should see three colored spheres on a white background.
-
+Ensure that you check each assignment or project’s specific instructions for details on expected outputs.
