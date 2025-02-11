@@ -1,10 +1,6 @@
 from PIL import Image
 from math import sqrt
-import sys, os
 
-# ------------------------------------------------------------
-# Basic Classes: Vec, Color, Sphere, Light, Triangle, Cylinder
-# ------------------------------------------------------------
 
 class Vec:
     def __init__(self, x, y, z):
@@ -112,30 +108,22 @@ class Cylinder:
         self.reflective = reflective
         self.transparency = transparency
 
-# ------------------------------------------------------------
-# Global Settings and Scene Object Lists
-# ------------------------------------------------------------
 
-# Use a 300×300 resolution.
 WIDTH = 300
 HEIGHT = 300
 viewport_size = 1.0
 projection_plane_z = 1.0
 
-# Camera at the origin, looking along +z.
 camera_position = Vec(0, 0, 0)
 
 background_color = Color(0, 0, 0)
 EPSILON = 0.001
 RECURSION_DEPTH = 3
 
-# Scene objects:
-# --- Sphere: shiny red reflective sphere.
 spheres = [
     Sphere(center=Vec(0.5, 0, 4), radius=1, color=Color(255, 0, 0), specular=500, reflective=0.8)
 ]
 
-# --- Cylinder: dark blue, refractive (transparent) cylinder.
 cylinders = [
     Cylinder(
         base=Vec(-0.5, -1, 3),
@@ -149,23 +137,17 @@ cylinders = [
     )
 ]
 
-# --- Bunny: loaded from OBJ (will be white).
 triangles = []  # to be filled by the OBJ loader
 
-# Lights.
 lights = [
     AmbientLight(0.2),
     PointLight(0.6, Vec(2, 1, 0)),
     DirectionalLight(0.2, Vec(1, 4, 4))
 ]
 
-# Global bounding box for the bunny (for optimization).
 bunny_bbox_min = None
 bunny_bbox_max = None
 
-# ------------------------------------------------------------
-# Utility Functions
-# ------------------------------------------------------------
 
 def canvas_to_viewport(x, y):
     """Map 2D canvas coordinates (origin at center) to 3D viewport coordinates."""
@@ -215,9 +197,6 @@ def refract_ray(incident, normal, n1, n2):
     refracted = incident.mul(eta).add(normal.mul(eta * cos_i - cos_t))
     return refracted.normalize()
 
-# ------------------------------------------------------------
-# Intersection Routines
-# ------------------------------------------------------------
 
 def intersect_ray_sphere(origin, direction, sphere):
     oc = origin.sub(sphere.center)
@@ -261,7 +240,6 @@ def intersect_ray_cylinder(origin, direction, cylinder):
     v = cylinder.axis
     r = cylinder.radius
 
-    # --- Side Intersection ---
     d_dot_v = d.dot(v)
     d_proj = d.sub(v.mul(d_dot_v))
     w = o.sub(b)
@@ -283,16 +261,13 @@ def intersect_ray_cylinder(origin, direction, cylinder):
                 proj = P.sub(b).dot(v)
                 if 0 <= proj <= cylinder.height:
                     t_side = min(t_side, t)
-    # --- Cap Intersections ---
     t_cap = float('inf')
-    # Bottom cap:
     if abs(d.dot(v)) > EPSILON:
         t_bottom = (cylinder.base.sub(o)).dot(v) / d.dot(v)
         if t_bottom > EPSILON:
             P_bottom = o.add(d.mul(t_bottom))
             if P_bottom.sub(cylinder.base).sub(v.mul(P_bottom.sub(cylinder.base).dot(v))).length() <= r:
                 t_cap = min(t_cap, t_bottom)
-    # Top cap:
     top_center = cylinder.base.add(v.mul(cylinder.height))
     if abs(d.dot(v)) > EPSILON:
         t_top = (top_center.sub(o)).dot(v) / d.dot(v)
@@ -304,9 +279,6 @@ def intersect_ray_cylinder(origin, direction, cylinder):
     t_final = min(t_side, t_cap)
     return t_final if t_final != float('inf') else float('inf')
 
-# ------------------------------------------------------------
-# OBJ Loader for the Bunny
-# ------------------------------------------------------------
 
 def load_obj(filename, color, specular, reflective):
     """Load a Wavefront OBJ file and return a list of Triangle objects."""
@@ -344,9 +316,6 @@ def load_obj(filename, color, specular, reflective):
                 tris.append(Triangle(v0, v1, v2, color, specular, reflective))
     return tris
 
-# ------------------------------------------------------------
-# Intersection, Lighting, and Ray Tracing Functions
-# ------------------------------------------------------------
 
 def closest_intersection(origin, direction, t_min, t_max):
     closest_t = float('inf')
@@ -464,9 +433,6 @@ def trace_ray(origin, direction, t_min, t_max, depth):
 
     return final_color
 
-# ------------------------------------------------------------
-# Rendering Function
-# ------------------------------------------------------------
 
 def render_scene():
     img = Image.new("RGB", (WIDTH, HEIGHT))
@@ -483,9 +449,6 @@ def render_scene():
             pixels[fx, fy] = (r, g, b)
     return img
 
-# ------------------------------------------------------------
-# Main: Scene Setup, Bunny Loading, Bunny Bounding Box, and Rendering
-# ------------------------------------------------------------
 
 def main():
     global bunny_bbox_min, bunny_bbox_max
@@ -498,7 +461,7 @@ def main():
                                    reflective=0)
         # Adjust bunny transformation so that it overlaps the cylinder.
         bunny_scale = 3.5
-        bunny_translation = Vec(-0.5, -1, 5)  # Adjusted translation: moves bunny rightward.
+        bunny_translation = Vec(-0.5, -1, 5)  
         for tri in bunny_triangles:
             tri.v0 = tri.v0.mul(bunny_scale).add(bunny_translation)
             tri.v1 = tri.v1.mul(bunny_scale).add(bunny_translation)
@@ -510,7 +473,6 @@ def main():
     except Exception as e:
         print("Error loading bunny.obj:", e)
 
-    # Compute bunny bounding box.
     if triangles:
         min_x = min_y = min_z = float('inf')
         max_x = max_y = max_z = -float('inf')
@@ -526,8 +488,8 @@ def main():
         bunny_bbox_max = Vec(max_x, max_y, max_z)
 
     image = render_scene()
-    image.save("assignment_4_output.png")
-    print("Render complete. Saved to assignment_4_output.png")
+    image.save("inclass_assessment.png")
+    print("Render complete. Saved to inclass_assessment.png")
 
 if __name__ == "__main__":
     main()

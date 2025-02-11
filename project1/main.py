@@ -272,5 +272,5 @@ def render_scene():
 
 if __name__ == "__main__":
     image = render_scene()
-    image.save("project_output3.png")
+    image.save("project_output.png")
     print("Rendering complete. Saved as project_output.png")
