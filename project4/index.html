@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bezier Curve Editor</title>
+  <style>
+    canvas {
+      border: 1px solid #ccc;
+      background: #fefefe;
+      display: block;
+      margin: 20px auto;
+      cursor: crosshair;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas" width="900" height="600"></canvas>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+let points = []; // stores anchor and control points
+let dragIndex = -1;
+
+canvas.addEventListener("mousedown", (e) => {
+  const pos = getMousePos(e);
+  dragIndex = getPointIndexAtPos(pos);
+  
+  if (e.button === 2) {
+    // Right click: remove last segment
+    if (points.length >= 4) {
+      points.splice(-3); // remove last 3 control points
+    }
+    draw();
+    return;
+  }
+
+  if (e.shiftKey) {
+    // Shift click: add new cubic Bezier segment
+    if (points.length >= 1) {
+      const last = points[points.length - 1];
+      points.push(
+        { x: last.x + 50, y: last.y - 50 },
+        { x: last.x + 100, y: last.y + 50 },
+        { x: last.x + 150, y: last.y }
+      );
+    } else {
+      points.push(pos); // first point
+    }
+    draw();
+  }
+});
+
+canvas.addEventListener("mousemove", (e) => {
+  if (dragIndex === -1) return;
+  const pos = getMousePos(e);
+  points[dragIndex] = pos;
+  draw();
+});
+
+canvas.addEventListener("mouseup", () => {
+  dragIndex = -1;
+});
+
+canvas.addEventListener("contextmenu", (e) => e.preventDefault());
+
+function getMousePos(e) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top
+  };
+}
+
+function getPointIndexAtPos(pos) {
+  for (let i = 0; i < points.length; i++) {
+    const p = points[i];
+    const dx = p.x - pos.x;
+    const dy = p.y - pos.y;
+    if (dx * dx + dy * dy < 100) return i;
+  }
+  return -1;
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw handles
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "#ccc";
+  for (let i = 0; i + 3 < points.length; i += 3) {
+    ctx.beginPath();
+    ctx.moveTo(points[i].x, points[i].y);
+    ctx.lineTo(points[i + 1].x, points[i + 1].y);
+    ctx.lineTo(points[i + 2].x, points[i + 2].y);
+    ctx.lineTo(points[i + 3].x, points[i + 3].y);
+    ctx.stroke();
+  }
+
+  // Draw bezier curves
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "blue";
+  for (let i = 0; i + 3 < points.length; i += 3) {
+    ctx.beginPath();
+    ctx.moveTo(points[i].x, points[i].y);
+    ctx.bezierCurveTo(
+      points[i + 1].x, points[i + 1].y,
+      points[i + 2].x, points[i + 2].y,
+      points[i + 3].x, points[i + 3].y
+    );
+    ctx.stroke();
+  }
+
+  // Draw points
+  for (let i = 0; i < points.length; i++) {
+    ctx.beginPath();
+    ctx.arc(points[i].x, points[i].y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = i % 3 === 0 ? "red" : "green"; // anchors vs control points
+    ctx.fill();
+  }
+}
+
+draw();
+</script>
+</body>
+</html>
